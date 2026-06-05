@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-cream-50 text-sage-900 font-sans;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-sage-600 hover:bg-sage-700 text-white font-medium shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-cream-100 text-sage-800 font-medium border border-sage-200 shadow-sm transition;
+  }
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-tangerine-500 hover:bg-tangerine-600 text-white font-medium shadow-sm transition;
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border cursor-pointer select-none transition;
+  }
+  .chip-on {
+    @apply bg-sage-600 text-white border-sage-600;
+  }
+  .chip-off {
+    @apply bg-white text-sage-800 border-sage-200 hover:bg-cream-100;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-sage-100;
+  }
+  .label {
+    @apply block text-sm font-semibold text-sage-800 mb-2;
+  }
+  .input {
+    @apply w-full px-4 py-2.5 rounded-xl border border-sage-200 bg-white focus:outline-none focus:ring-2 focus:ring-sage-400 focus:border-transparent;
+  }
+}
+
+/* Custom checkbox styling for the shopping list */
+.shop-check {
+  @apply h-5 w-5 rounded border-2 border-sage-300 text-sage-600 focus:ring-sage-400 cursor-pointer;
+}
+
+/* Print-friendly styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print { display: none !important; }
+  .print-page-break { page-break-before: always; }
+  .card { box-shadow: none !important; border: 1px solid #ccc !important; }
+}
