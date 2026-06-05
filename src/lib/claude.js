@@ -78,7 +78,7 @@ export async function generateMealPlan(apiKey, prefs) {
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 8000,
+    max_tokens: 16000,
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: buildUserPrompt(prefs) }]
   })
@@ -88,6 +88,13 @@ export async function generateMealPlan(apiKey, prefs) {
     .map((b) => b.text)
     .join('\n')
     .trim()
+
+  if (response.stop_reason === 'max_tokens') {
+    throw new Error(
+      'Claude ran out of output tokens before finishing the plan. ' +
+      'Try fewer cuisines or shorter notes, then regenerate.'
+    )
+  }
 
   const parsed = extractJson(text)
   validatePlan(parsed)
@@ -102,10 +109,17 @@ function extractJson(text) {
   } catch {
     const first = cleaned.indexOf('{')
     const last = cleaned.lastIndexOf('}')
-    if (first === -1 || last === -1) {
-      throw new Error('Model did not return JSON.')
+    if (first !== -1 && last !== -1) {
+      try {
+        return JSON.parse(cleaned.slice(first, last + 1))
+      } catch {
+        // fall through to friendlier error
+      }
     }
-    return JSON.parse(cleaned.slice(first, last + 1))
+    throw new Error(
+      'Could not parse the meal plan Claude returned. The response may have ' +
+      'been cut off. Please regenerate.'
+    )
   }
 }
 
